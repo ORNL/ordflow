@@ -1,8 +1,20 @@
-# MD_Extractors
-Scripts for extracting metadata from scientific data files
+# Metadata Extractors
+A collecton of domain-expert-provided scripts for extracting metadata from scientific data files
 
+# Extraction Scripts
+* These are standalone / self-contained scripts that would accept one or more datasets and output metadata in the form of a JSON file. 
+  * If importing other dependency codes, please use dependencies that are easily available and installable via a code repository. 
+  * If the software stack is challenging to build, consider building a docker / singularity container that could accomplish the same goal
+* We recommend writing these scripts in a popular, open-source, easily available programming language such as shell scripts, python, etc.
+
+# Organization
 Below is a proposed method for organizing the scripts along the lines of the ORNL organizational structure. Please create (nested) folders according to this organizational scheme and place your scripts there.
 
+* Generic
+  * HDF5
+  * Net-CDF
+  * CSV
+  * Apache Parquet ...
 * Computational Sciences
 	* Simulations
 		* Material Science
