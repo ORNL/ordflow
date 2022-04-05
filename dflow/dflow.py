@@ -11,6 +11,16 @@ class Transport(Enum):
 class API(object):
 
     def __init__(self, api_key, server_url=None):
+        """
+
+        Parameters
+        ----------
+        api_key : str
+            API key for accessing DataFlow
+        server_url : str, Optional
+            URL for DataFlow server.
+            Default: staging server
+        """
         if not isinstance(api_key, str):
             raise TypeError("api_key should be a string. Generate this from DataFlow")
         if server_url:
@@ -23,12 +33,44 @@ class API(object):
         self._API_KEY = api_key
 
     def __get(self, url):
+        """
+        Internal function to send GET requests
+
+        Parameters
+        ----------
+        url : str
+            URL for GET request
+
+        Returns
+        -------
+        dict
+            Response to GET request
+        """
         headers = {"accept": "*/*",
                    "Authorization": self._API_KEY}
         response = requests.get(url, headers=headers)
         return response.json()
 
-    def __post(self, url, headers={}, json=None, files=None):
+    def __post(self, url, headers={}, json=None, data=None, files=None):
+        """
+
+        Parameters
+        ----------
+        url : str
+            URL for POST request
+        headers : dict, optional
+            Headers besides the accept and auth token
+        json : dict, optional
+            Dict
+        files : dict
+            Dict
+
+        Returns
+        -------
+        dict
+            Response to POST request
+        """
+        # TODO: Use **kwargs instead
         basic_headers = {"accept": "*/*",
                          "Authorization": self._API_KEY}
         basic_headers.update(headers)
@@ -37,17 +79,61 @@ class API(object):
                                  json=json, files=files)
         return response.json()
 
-    def __validate_dset_id(self, dataset_id):
+    @staticmethod
+    def __validate_dset_id(dataset_id):
+        """
+        Validates dataset ID
+
+        Parameters
+        ----------
+        dataset_id : int
+            ID for dataset
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        TypeError
+        ValueError
+        """
         if not isinstance(dataset_id, int):
             raise TypeError("dataset_id should be an integer > 0")
         if dataset_id < 0:
             raise ValueError("dataset_id should be > 0")
 
     def endpoints_active(self):
+        """
+        Checks whether both source and destination Globus endpoints are active
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
         url = "%s/%s" % (self._API_URL, 'endpoints/activation')
+        # TODO: What should this response look like to be pythonic?
         return self.__get(url)
 
     def endpoints_activate(self, username, password, endpoint="destination"):
+        """
+
+        Parameters
+        ----------
+        username : str
+            user name
+        password : str
+            password
+        endpoint : str, Optional
+            Which endpoint to activate. Currently "source" and "destination"
+            are the only values accepted
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
         path = 'endpoints/activate?endpoint={}&username={}&password={}'.format(endpoint, username, password)
         url = "%s/%s" % (self._API_URL, path)
         return self.__post(url)
