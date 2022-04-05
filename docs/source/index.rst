@@ -1,0 +1,36 @@
+.. pycroscopy documentation master file, created by
+   sphinx-quickstart on Thu Aug  3 12:58:27 2017.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+=====
+dflow
+=====
+
+**Python interface to ORNL's DataFlow**
+
+Jump to `GitHub project page <https://github.com/ORNL/dflow>`_
+
+**Installation:**
+
+.. code:: bash
+
+  pip install dflow
+
+API
+---
+.. autosummary::
+   :toctree: _autosummary
+   :template: custom-module-template.rst
+   :recursive:
+
+   sidpy
+
+* :ref:`modindex`
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: Examples
+
+   notebooks/**/index
