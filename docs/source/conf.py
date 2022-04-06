@@ -15,8 +15,6 @@
 import os
 import sys
 import shutil
-import matplotlib
-matplotlib.use('agg')
 import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../..'))
 from dflow import __version__ as dflow_version
