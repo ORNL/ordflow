@@ -292,7 +292,15 @@ class API(object):
         path = 'dataset-file-upload'
         url = "%s/%s" % (self._API_URL, path)
 
+        self.__validate_str_parm(file_path, "file_path")
+        if not os.path.exists(file_path):
+            raise FileNotFoundError("{} not found".format(file_path))
+
         self.__validate_integer(dataset_id, "dataset_id", min_val=0)
+
+        if transport:
+            if not isinstance(transport, Transport):
+                raise TypeError("transport should be of type dflow.Transport")
 
         file_handle = open(file_path, "rb")
 
@@ -304,7 +312,7 @@ class API(object):
                 raise TypeError("relative_path should be a string")
             form_data.update({'relative_path': relative_path})
 
-        if not transport:
+        if transport != Transport.GLOBUS:
             print("using Globus since other file transfer adapters have not been implemented")
 
         response = self.__post(url,
@@ -314,69 +322,3 @@ class API(object):
         file_handle.close()
 
         return response
-
-    def file_upload_curl(self, file_path, dataset_id, relative_path=None, transport=None, verbose=True):
-        """
-        Upload the provided file to the specified Dataset
-
-        Parameters
-        ----------
-        file_path : str
-            Local path to file that needs to be uploaded
-        dataset_id : int
-            Dataset ID to upload this file to
-        relative_path : str, optional
-            Relative path in destination to place this file.
-            Default - the file will be uploaded to the root directory of the dataset
-        transport : dflow.Transport, optional
-            Transport protocol to use to transfer this specific file
-        verbose : bool, optional
-            Whether or not to print out the curl command that will be sent out on shell
-            for debugging and validation purposes.
-            Default = True
-
-        Returns
-        -------
-        int
-            return value from os.system
-        """
-        warn("The behavior and output of this function are expected to change"
-             "significantly in the future. "
-             "The inputs are expected to be the same, however", FutureWarning)
-        self.__validate_str_parm(file_path, "file_path")
-        if not os.path.exists(file_path):
-            raise FileNotFoundError("{} not found".format(file_path))
-
-        self.__validate_integer(dataset_id, "dataset_id", min_val=0)
-
-        if transport:
-            if not isinstance(transport, Transport):
-                raise TypeError("transport should be of type dflow.Transport")
-
-        path = 'dataset-file-upload'
-        url = "%s/%s" % (self._API_URL, path)
-
-        cmd = ["curl -X 'POST'",
-               "'{}'".format(url),
-               "-H 'accept: */*'",
-               "-H 'Content-Type: multipart/form-data'",
-               "-H 'Authorization: {}'".format(self._API_KEY),
-               "-F 'file=@{}'".format(file_path),
-               "-F 'dataset_id={}'".format(dataset_id),
-               ]
-        if relative_path:
-            cmd.append("-F 'relative_path={}'".format(relative_path))
-
-        if not transport:
-            print("using Globus since others have not been implemented")
-
-        cmd.append("-F 'transport=globus'")
-
-        if verbose:
-            print('curl command that will be called:')
-            print(' \\ \n'.join(cmd))
-
-        if platform == "win32":
-            warn("Currently building and executing curl command. "
-                 "This may not work on Windows", RuntimeWarning)
-        return os.system(' '.join(cmd))
