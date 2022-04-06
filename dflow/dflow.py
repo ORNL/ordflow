@@ -1,7 +1,5 @@
 from enum import Enum
 import os
-from sys import platform
-from warnings import warn
 import requests
 
 
@@ -17,6 +15,7 @@ class API(object):
 
     def __init__(self, api_key, server_url=None):
         """
+        Creates an instance of the API class to communicate with DataFlow
 
         Parameters
         ----------
@@ -270,7 +269,6 @@ class API(object):
     def file_upload(self, file_path, dataset_id, relative_path=None, transport=None):
         """
         Upload the provided file to the specified Dataset.
-        NOTE - this method does NOT yet work
 
         Parameters
         ----------
