@@ -1,9 +1,14 @@
 from enum import Enum
 import os
+from sys import platform
+from warnings import warn
 import requests
 
 
 class Transport(Enum):
+    """
+    The different data transfer protocols supported by DataFlow
+    """
     GLOBUS = 0
     HTTPS = 1
 
@@ -62,6 +67,8 @@ class API(object):
             Headers besides the accept and auth token
         json : dict, optional
             Dict
+        data : dict, optional
+            Key-value pairs for the form
         files : dict
             Dict
 
@@ -80,14 +87,14 @@ class API(object):
         return response.json()
 
     @staticmethod
-    def __validate_dset_id(dataset_id):
+    def __validate_integer(value, title, min_val=0):
         """
-        Validates dataset ID
+        Validates integer parameter
 
         Parameters
         ----------
-        dataset_id : int
-            ID for dataset
+        value : int
+            value to validate
 
         Returns
         -------
@@ -98,10 +105,38 @@ class API(object):
         TypeError
         ValueError
         """
-        if not isinstance(dataset_id, int):
-            raise TypeError("dataset_id should be an integer > 0")
-        if dataset_id < 0:
-            raise ValueError("dataset_id should be > 0")
+        if not isinstance(value, int):
+            raise TypeError("{} should be an int".format(title))
+        if value < min_val:
+            raise ValueError("{} should be > {}".format(title, min_val))
+
+    @staticmethod
+    def __validate_str_parm(value, title):
+        """
+        Validate string parameter
+
+        Parameters
+        ----------
+        value : str
+            Object to test
+        title : str
+            Name of variable or parameter
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        TypeError
+        ValueError
+        """
+        mesg = '{} should be a non empty string'.format(title)
+        if not isinstance(value, str):
+            raise TypeError(mesg)
+        title = title.strip()
+        if len(title) < 1:
+            raise ValueError(mesg)
 
     def endpoints_active(self):
         """
@@ -139,20 +174,65 @@ class API(object):
         return self.__post(url)
 
     def dataset_search(self, query):
-        path = 'datasets/search?q={}'.format("blah")
+        """
+        Search for a dataset in DataFlow
+
+        Parameters
+        ----------
+        query : str
+            Text or date to search on
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
+        self.__validate_str_parm(query, "query")
+        # TODO: Verify that spaces and other non alphanumeric characters are correctly encoded
+        path = 'datasets/search?q={}'.format(query)
         url = "%s/%s" % (self._API_URL, path)
         return self.__get(url)
 
     def dataset_info(self, dset_id):
-        if not isinstance(dset_id, int):
-            raise TypeError("dset_id should be a positive integer")
-        elif dset_id < 0:
-            raise ValueError("dset_id should be a positive integer")
+        """
+        Show information about a dataset
+
+        Parameters
+        ----------
+        dset_id : ID for dataset
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
+        self.__validate_integer(dset_id, "dset_id", min_val=0)
         path = 'datasets/{}'.format(dset_id)
         url = "%s/%s" % (self._API_URL, path)
         return self.__get(url)
 
     def dataset_create(self, title, instrument_id=0, metadata=None):
+        """
+        Create a new dataset
+
+        Parameters
+        ----------
+        title : str
+            Title for dataset
+        instrument_id : int, optional
+            Instrument ID. Default = 0 - UnknownInstrument
+        metadata : dict, optional
+            Scientific metadata associated with this dataset
+
+        Returns
+        -------
+        dict
+            Response from POST request
+        """
+        self.__validate_str_parm(title, "title")
+        if metadata:
+            if not isinstance(metadata, dict):
+                raise TypeError("metadata should be a dict")
         url = "%s/%s" % (self._API_URL, "datasets")
         data = {"name": title,
                 "instrument_id": instrument_id}
@@ -163,18 +243,54 @@ class API(object):
                            json=data)
 
     def files_search(self, query, dataset_id=None):
+        """
+        Search for individual files in datasets
+
+        Parameters
+        ----------
+        query : str
+            Search query
+        dataset_id : int, optional
+            Filter results to the specified Dataset. Default - no filtering
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
         path = 'dataset-files/search?q={}'.format(query)
         if dataset_id is not None:
-            self.__validate_dset_id(dataset_id)
+            self.__validate_integer(dataset_id, "dataset_id", min_val=0)
             path += "&dataset_id={}".format(dataset_id)
         url = "%s/%s" % (self._API_URL, path)
         return self.__get(url)
 
-    def file_upload(self, file_path, dataset_id, relative_path=None, transport=None):
+    def __file_upload(self, file_path, dataset_id, relative_path=None, transport=None):
+        """
+        Upload the provided file to the specified Dataset.
+        NOTE - this method does NOT yet work
+
+        Parameters
+        ----------
+        file_path : str
+            Local path to file that needs to be uploaded
+        dataset_id : int
+            Dataset ID to upload this file to
+        relative_path : str, optional
+            Relative path in destination to place this file.
+            Default - the file will be uploaded to the root directory of the dataset
+        transport : dflow.Transport, optional
+            Transport protocol to use to transfer this specific file
+
+        Returns
+        -------
+        dict
+            Response from POST request
+        """
         path = 'dataset-file-upload'
         url = "%s/%s" % (self._API_URL, path)
 
-        self.__validate_dset_id(dataset_id)
+        self.__validate_integer(dataset_id, "dataset_id", min_val=0)
 
         file_handle = open(file_path, "rb")
 
@@ -198,7 +314,44 @@ class API(object):
 
         return response
 
-    def file_upload_curl(self, file_path, dataset_id, relative_path=None, transport=None, verbose=True):
+    def file_upload(self, file_path, dataset_id, relative_path=None, transport=None, verbose=True):
+        """
+        Upload the provided file to the specified Dataset
+
+        Parameters
+        ----------
+        file_path : str
+            Local path to file that needs to be uploaded
+        dataset_id : int
+            Dataset ID to upload this file to
+        relative_path : str, optional
+            Relative path in destination to place this file.
+            Default - the file will be uploaded to the root directory of the dataset
+        transport : dflow.Transport, optional
+            Transport protocol to use to transfer this specific file
+        verbose : bool, optional
+            Whether or not to print out the curl command that will be sent out on shell
+            for debugging and validation purposes.
+            Default = True
+
+        Returns
+        -------
+        int
+            return value from os.system
+        """
+        warn("The behavior and output of this function are expected to change"
+             "significantly in the future. "
+             "The inputs are expected to be the same, however", FutureWarning)
+        self.__validate_str_parm(file_path, "file_path")
+        if not os.path.exists(file_path):
+            raise FileNotFoundError("{} not found".format(file_path))
+
+        self.__validate_integer(dataset_id, "dataset_id", min_val=0)
+
+        if transport:
+            if not isinstance(transport, Transport):
+                raise TypeError("transport should be of type dflow.Transport")
+
         path = 'dataset-file-upload'
         url = "%s/%s" % (self._API_URL, path)
 
@@ -220,6 +373,9 @@ class API(object):
 
         if verbose:
             print('curl command that will be called:')
-            print(' \ \n'.join(cmd))
+            print(' \\ \n'.join(cmd))
 
-        os.system(' '.join(cmd))
+        if platform == "win32":
+            warn("Currently building and executing curl command. "
+                 "This may not work on Windows", RuntimeWarning)
+        return os.system(' '.join(cmd))
