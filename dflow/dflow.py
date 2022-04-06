@@ -83,7 +83,8 @@ class API(object):
         basic_headers.update(headers)
         response = requests.post(url,
                                  headers=basic_headers,
-                                 json=json, files=files)
+                                 json=json, files=files,
+                                 data=data)
         return response.json()
 
     @staticmethod
@@ -199,7 +200,8 @@ class API(object):
 
         Parameters
         ----------
-        dset_id : ID for dataset
+        dset_id : int
+            ID for dataset
 
         Returns
         -------
@@ -265,7 +267,7 @@ class API(object):
         url = "%s/%s" % (self._API_URL, path)
         return self.__get(url)
 
-    def __file_upload(self, file_path, dataset_id, relative_path=None, transport=None):
+    def file_upload(self, file_path, dataset_id, relative_path=None, transport=None):
         """
         Upload the provided file to the specified Dataset.
         NOTE - this method does NOT yet work
@@ -294,27 +296,26 @@ class API(object):
 
         file_handle = open(file_path, "rb")
 
-        files = {'file': file_handle,
-                 'dataset_id': dataset_id,
-                 'transport': 'globus'}
+        form_data = {'dataset_id': dataset_id,
+                     'transport': 'globus'}
 
         if relative_path:
             if not isinstance(relative_path, str):
                 raise TypeError("relative_path should be a string")
-            files.update({'relative_path': relative_path})
+            form_data.update({'relative_path': relative_path})
 
         if not transport:
-            print("using Globus since others have not been implemented")
+            print("using Globus since other file transfer adapters have not been implemented")
 
-        headers = {"Content-Type": "multipart/form-data"}
-
-        response = self.__post(url, files=files, headers=headers)
+        response = self.__post(url,
+                               files={'file': file_handle},
+                               data=form_data)
 
         file_handle.close()
 
         return response
 
-    def file_upload(self, file_path, dataset_id, relative_path=None, transport=None, verbose=True):
+    def file_upload_curl(self, file_path, dataset_id, relative_path=None, transport=None, verbose=True):
         """
         Upload the provided file to the specified Dataset
 
