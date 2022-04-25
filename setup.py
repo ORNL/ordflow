@@ -7,13 +7,13 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
     long_description = f.read()
 
-with open(os.path.join(here, 'dflow/__version__.py')) as f:
+with open(os.path.join(here, 'ordflow/__version__.py')) as f:
     __version__ = f.read().split("'")[1]
 
 requirements = ['requests']
 
 setup(
-    name='dflow',
+    name='ordflow',
     version=__version__,
     description="Python interface to ORNL's DataFlow",
     long_description=long_description,
@@ -35,7 +35,7 @@ setup(
         'Topic :: Scientific/Engineering :: Information Analysis'],
     keywords=['data transfer', 'REST', 'Globus', 'metadata', 'scientific', 'instruments', 'network'],
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
-    url='https://github.com/ORNL/dflow',
+    url='https://github.com/ORNL/ordflow',
     license='MIT',
     author='S. Somnath',
     author_email='somnaths@ornl.gov',

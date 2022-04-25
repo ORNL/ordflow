@@ -451,7 +451,7 @@ class API(object):
         relative_path : str, optional
             Relative path in destination to place this file.
             Default - the file will be uploaded to the root directory of the dataset
-        transport : dflow.Transport, optional
+        transport : ordflow.Transport, optional
             Transport protocol to use to transfer this specific file
 
         Returns
@@ -470,7 +470,7 @@ class API(object):
 
         if transport:
             if not isinstance(transport, Transport):
-                raise TypeError("transport should be of type dflow.Transport")
+                raise TypeError("transport should be of type ordflow.Transport")
 
         file_handle = open(file_path, "rb")
 

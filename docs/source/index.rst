@@ -3,19 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-=====
-dflow
-=====
+=======
+ordflow
+=======
 
 **Python interface to ORNL's DataFlow**
 
-Jump to `GitHub project page <https://github.com/ORNL/dflow>`_
+Jump to `GitHub project page <https://github.com/ORNL/ordflow>`_
 
 **Installation:**
 
 .. code:: bash
 
-  pip install dflow
+  pip install ordflow
 
 API
 ---
@@ -24,7 +24,7 @@ API
    :template: custom-module-template.rst
    :recursive:
 
-   dflow
+   ordflow
 
 * :ref:`modindex`
 

@@ -1,5 +1,5 @@
-dflow
-=====
+ordflow
+=======
 
 Python interface to ORNL's `DataFlow <https://dataflow.ornl.gov>`_
 

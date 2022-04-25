@@ -17,7 +17,7 @@ import sys
 import shutil
 import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../..'))
-from dflow import __version__ as dflow_version
+from ordflow import __version__ as dflow_version
 
 # - Copy over examples folder to docs/source
 # This makes it so that nbsphinx properly loads the notebook images
@@ -42,7 +42,7 @@ for root, dirs, files in os.walk(examples_source):
 
 # -- Project information -----------------------------------------------------
 
-project = 'dflow'
+project = 'ordflow'
 copyright = '2020, Suhas Somnath and Greg Shutt'
 author = 'Suhas Somnath and Greg Shutt'
 
@@ -179,7 +179,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-html_title = u'dflow ' + dflow_version
+html_title = u'ordflow ' + dflow_version
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -271,7 +271,7 @@ html_search_language = 'en'
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'dflowdoc'
+htmlhelp_basename = 'ordflowdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -298,7 +298,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dflow.tex', 'dflow Documentation',
+    (master_doc, 'ordflow.tex', 'ordflow Documentation',
      'Pycroscopy contributors', 'manual'),
 ]
 
@@ -327,7 +327,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'dflow', 'dflow Documentation',
+    (master_doc, 'ordflow', 'ordflow Documentation',
      [author], 1)
 ]
 
@@ -338,8 +338,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dflow', 'dflow Documentation',
-     author, 'dflow',
+    (master_doc, 'ordflow', 'ordflow Documentation',
+     author, 'ordflow',
      'Python interface to ORNL DataFlow',
      'Miscellaneous'),
 ]
