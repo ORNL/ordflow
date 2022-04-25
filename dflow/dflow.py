@@ -1,4 +1,5 @@
 from enum import Enum
+from collections.abc import MutableMapping
 import os
 import requests
 
@@ -53,6 +54,8 @@ class API(object):
         headers = {"accept": "*/*",
                    "Authorization": self._API_KEY}
         response = requests.get(url, headers=headers)
+        if not response.ok:
+            raise ValueError("{}: {}".format(response.reason, response.text[1:-1]))
         return response.json()
 
     def __post(self, url, headers={}, json=None, data=None, files=None):
@@ -84,6 +87,8 @@ class API(object):
                                  headers=basic_headers,
                                  json=json, files=files,
                                  data=data)
+        if not response.ok:
+            raise ValueError("{}: {}".format(response.reason, response.text[1:-1]))
         return response.json()
 
     @staticmethod
@@ -138,21 +143,150 @@ class API(object):
         if len(title) < 1:
             raise ValueError(mesg)
 
-    def endpoints_active(self):
+    @staticmethod
+    def __flatten_dict(nested_dict, separator='-'):
         """
-        Checks whether both source and destination Globus endpoints are active
+        Flattens a nested dictionary
+        Parameters
+        ----------
+        nested_dict : dict
+            Nested dictionary
+        separator : str, Optional. Default='-'
+            Separator between the keys of different levels
+        Returns
+        -------
+        dict
+            Dictionary whose keys are flattened to a single level
+        Notes
+        -----
+        Taken from https://stackoverflow.com/questions/6027558/flatten-nested-
+        dictionaries-compressing-keys
+        """
+        if not isinstance(nested_dict, dict):
+            raise TypeError('nested_dict should be a dict')
+
+        def __flatten_dict_int(nest_dict, sep, parent_key=''):
+            items = []
+            if sep == '_':
+                repl = '-'
+            else:
+                repl = '_'
+            for key, value in nest_dict.items():
+                if not isinstance(key, str):
+                    key = str(key)
+                if sep in key:
+                    key = key.replace(sep, repl)
+
+                new_key = parent_key + sep + key if parent_key else key
+                if isinstance(value, MutableMapping):
+                    items.extend(__flatten_dict_int(value, sep, parent_key=new_key).items())
+                # nion files contain lists of dictionaries, oops
+                elif isinstance(value, list):
+                    for i in range(len(value)):
+                        if isinstance(value[i], dict):
+                            for kk in value[i]:
+                                items.append(('dim-' + kk + '-' + str(i), value[i][kk]))
+                        else:
+                            if type(value) != bytes:
+                                items.append((new_key, value))
+                else:
+                    if type(value) != bytes:
+                        items.append((new_key, value))
+            return dict(items)
+
+        return __flatten_dict_int(nested_dict, separator)
+
+    def settings_get(self):
+        """
+        Gets current default user settings
 
         Returns
         -------
         dict
             Response from GET request
         """
-        url = "%s/%s" % (self._API_URL, 'endpoints/activation')
+        path = "user-settings"
+        url = "%s/%s" % (self._API_URL, path)
+        return self.__get(url)
+
+    def settings_set(self, setting, value):
+        """
+        Set or update default user settings
+
+        Parameters
+        ----------
+        setting : str
+            Name of parameter
+            Currently, only "globus.destination_endpoint" and "transport.protocol" are supported
+        value : obj
+            New value for chosen parameter
+
+        Returns
+        -------
+        dict
+            Response from POST request
+        """
+        self.__validate_str_parm(setting, "setting")
+        path = "user-settings/?setting={}&value={}".format(setting, value)
+        url = "%s/%s" % (self._API_URL, path)
+        return self.__post(url)
+
+    def instrument_list(self):
+        """
+        List all instruments connected to this DataFlow server
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
+        url = "%s/%s" % (self._API_URL, "instruments")
+        return self.__get(url)
+
+    def instrument_info(self, instr_id):
+        """
+        Show information about an Instrument
+
+        Parameters
+        ----------
+        instr_id : int
+            ID for Insrtument
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
+        self.__validate_integer(instr_id, "instr_id", min_val=0)
+        path = 'instruments/{}'.format(instr_id)
+        url = "%s/%s" % (self._API_URL, path)
+        return self.__get(url)
+
+    def globus_endpoints_active(self, endpoint=None):
+        """
+        Checks whether both source and destination Globus endpoints are active
+
+        Parameters
+        ----------
+        endpoint : str, Optional. 
+            UUID of endpoint whose status needs to be checked. 
+            Default = None - checks the default destination Globus endpoint 
+            along with the DataFlow server's endpoint
+
+        Returns
+        -------
+        dict
+            Response from GET request
+        """
+        url = "%s/%s" % (self._API_URL, 'transports/globus/activation')
+        if isinstance(endpoint, str):
+            url += "?endpoint=" + endpoint
         # TODO: What should this response look like to be pythonic?
         return self.__get(url)
 
-    def endpoints_activate(self, username, password, endpoint="destination"):
+    def globus_endpoints_activate(self, username, password, encrypted=True, endpoint="destination"):
         """
+        Activates Globus endpoints necessary to transfer data
 
         Parameters
         ----------
@@ -160,16 +294,26 @@ class API(object):
             user name
         password : str
             password
+        encrypted : bool, Optional
+            Whether or not the password is encrypted (using the DataFlow web server's encryption).
+            Default = encrypted password
         endpoint : str, Optional
-            Which endpoint to activate. Currently "source" and "destination"
-            are the only values accepted
+            Endpoint to activate. 
+            The 3 valid options are:
+            1. "source" - DataFlow server's endpoint, 
+            2. "destination" - Where data will be sent to, 
+            and 3. the UUID of some other endpoint
 
         Returns
         -------
         dict
             Response from GET request
         """
-        path = 'endpoints/activate?endpoint={}&username={}&password={}'.format(endpoint, username, password)
+        pwd_prefix = "encrypted"
+        if not encrypted:
+            pwd_prefix = "unencrypted"
+        path = 'transports/globus/activate?endpoint={}&username={}&{}_password={}'.format(endpoint, username,
+                                                                                          pwd_prefix, password)
         url = "%s/%s" % (self._API_URL, path)
         return self.__post(url)
 
@@ -212,6 +356,28 @@ class API(object):
         url = "%s/%s" % (self._API_URL, path)
         return self.__get(url)
 
+    @staticmethod
+    def __mdata_dict_2_list(metadata):
+        """
+        Converts metadata dictionary to a list amenable to DataFlow
+
+        Parameters
+        ----------
+        metadata: dict
+            Metadata specified as {key_1: value_1, key_2: value_2}
+
+        Returns
+        -------
+        list
+            Metadata reformatted as:
+            [{"field_name": key_1, "field_value": value_1}, 
+             {"field_name": key_2, "field_value": value_2}]
+        """
+        mdlist = list()
+        for key, val in metadata.items():
+            mdlist.append({"field_name": key, "field_value": val})
+        return mdlist
+
     def dataset_create(self, title, instrument_id=0, metadata=None):
         """
         Create a new dataset
@@ -223,7 +389,9 @@ class API(object):
         instrument_id : int, optional
             Instrument ID. Default = 0 - UnknownInstrument
         metadata : dict, optional
-            Scientific metadata associated with this dataset
+            Scientific metadata associated with this dataset.
+            Metadata specified as {"param 1": value_1, "param 2": value_2}
+            Nested dictionaries will be flattened with keys joined with a "-" separator
 
         Returns
         -------
@@ -234,10 +402,14 @@ class API(object):
         if metadata:
             if not isinstance(metadata, dict):
                 raise TypeError("metadata should be a dict")
+
         url = "%s/%s" % (self._API_URL, "datasets")
         data = {"name": title,
                 "instrument_id": instrument_id}
-        # TODO: Use metadata!
+        if isinstance(metadata, dict):
+            flat_md = self.__flatten_dict(metadata)
+            mdata_list = self.__mdata_dict_2_list(flat_md)
+            data["metadata_field_values_attributes"] = mdata_list
 
         return self.__post(url,
                            headers={"Content-Type": "application/json"},
