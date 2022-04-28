@@ -52,7 +52,7 @@ class API(object):
             Response to GET request
         """
         headers = {"accept": "*/*",
-                   "Authorization": self._API_KEY}
+                   "Authorization": "Bearer: " + self._API_KEY}
         response = requests.get(url, headers=headers)
         if not response.ok:
             raise ValueError("{}: {}".format(response.reason, response.text[1:-1]))
@@ -81,7 +81,7 @@ class API(object):
         """
         # TODO: Use **kwargs instead
         basic_headers = {"accept": "*/*",
-                         "Authorization": self._API_KEY}
+                         "Authorization": "Bearer: " + self._API_KEY}
         basic_headers.update(headers)
         response = requests.post(url,
                                  headers=basic_headers,
