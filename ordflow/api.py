@@ -22,19 +22,23 @@ class API(object):
         ----------
         api_key : str
             API key for accessing DataFlow
+            Please omit the "Bearer " prefix before the API key
         server_url : str, Optional
             URL for DataFlow server.
             Default: staging server
         """
         if not isinstance(api_key, str):
             raise TypeError("api_key should be a string. Generate this from DataFlow")
+
+        if api_key.lower().startswith("bearer "):
+            api_key = api_key.split(' ')[-1]
         if server_url:
-            if not isinstance(server_url, str):
-                raise TypeError("server_url should be a str")
+            self.__validate_str_parm(server_url, "server_url")
             self._API_URL = server_url
         else:
-            print("Using staging server as default")
             self._API_URL = "https://dataflow-staging.ornl.gov/api/v1"
+            print("Using server at: {} as default".format(self._API_URL))
+
         self._API_KEY = api_key
 
     def __get(self, url):
@@ -286,14 +290,22 @@ class API(object):
 
     def globus_endpoints_activate(self, username, password, encrypted=True, endpoint="destination"):
         """
-        Activates Globus endpoints necessary to transfer data
+        Activates Globus endpoints necessary to transfer data.
+
+        Notes
+        -----
+        It is entirely possible that the source and destination endpoints are in different security enclaves
+        in the same organization or even in different organizations.
+        For now, the "source" endpoint typically uses ORNL XCAMS credentials (your three-character ID and password).
+        By default, the "destination" endpoint points to ORNL's CADES Open-Research Network File System, which also
+        uses ORNL XCAMS credentials.
 
         Parameters
         ----------
         username : str
-            user name
+            user name associated with the specified endpoint
         password : str
-            password
+            password associated with specified endpoint
         encrypted : bool, Optional
             Whether or not the password is encrypted (using the DataFlow web server's encryption).
             Default = encrypted password
