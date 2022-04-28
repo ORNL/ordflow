@@ -36,7 +36,7 @@ class API(object):
             self.__validate_str_parm(server_url, "server_url")
             self._API_URL = server_url
         else:
-            self._API_URL = "https://dataflow-staging.ornl.gov/api/v1"
+            self._API_URL = "https://dataflow.ornl.gov/api/v1"
             print("Using server at: {} as default".format(self._API_URL))
 
         self._API_KEY = api_key
