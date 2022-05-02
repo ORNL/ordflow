@@ -1,5 +1,20 @@
 ordflow
 =======
+.. image:: https://github.com/ORNL/ordflow/actions/workflows/actions.yml/badge.svg?branch=master
+    :target: https://github.com/ORNL/ordflow/actions/workflows/actions.yml
+    :alt: GiHub Actions
+
+.. image:: https://img.shields.io/pypi/v/ordflow.svg
+    :target: https://pypi.org/project/ordflow/
+    :alt: PyPI
+
+.. image:: https://img.shields.io/pypi/l/ordflow.svg
+    :target: https://pypi.org/project/ordflow/
+    :alt: License
+
+.. image:: http://pepy.tech/badge/ordflow
+    :target: http://pepy.tech/project/ordflow
+    :alt: Downloads
 
 Python interface to ORNL's `DataFlow <https://dataflow.ornl.gov>`_
 
