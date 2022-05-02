@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataFlow API walkthrough &mdash; ordflow 0.0.2</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="User guide" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ordflow
+          </a>
+              <div class="version">
+                0.0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ordflow.html">ordflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DataFlow API walkthrough</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#0.-Prepare-to-use-DataFlow’s-API:">0. Prepare to use DataFlow’s API:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#1.-Instantiate-the-API">1. Instantiate the API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#2.-Check-default-settings">2. Check default settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#3.-Update-a-default-setting">3. Update a default setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#4.-List-and-view-registered-instruments">4. List and view registered instruments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#5.-Check-to-see-if-Globus-endpoints-are-active:">5. Check to see if Globus endpoints are active:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#6.-Activate-one-or-both-endpoints-as-necessary:">6. Activate one or both endpoints as necessary:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#7.-Create-a-measurement-Dataset">7. Create a measurement Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#8.-Upload-data-file(s)-to-Dataset">8. Upload data file(s) to Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#9.-Search-Dataset:">9. Search Dataset:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#10.-View-this-Dataset:">10. View this Dataset:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#11.-View-files-uploaded-via-DataFlow:">11. View files uploaded via DataFlow:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ordflow</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">User guide</a> &raquo;</li>
+      <li>DataFlow API walkthrough</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/notebooks/01_User_guide/DataFlow_API_Walkthrough.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="DataFlow-API-walkthrough">
+<h1>DataFlow API walkthrough<a class="headerlink" href="#DataFlow-API-walkthrough" title="Permalink to this headline">¶</a></h1>
+<p>Suhas Somnath 4/6/2022 Oak Ridge National Laboratory</p>
+<section id="0.-Prepare-to-use-DataFlow’s-API:">
+<h2>0. Prepare to use DataFlow’s API:<a class="headerlink" href="#0.-Prepare-to-use-DataFlow’s-API:" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Install the <code class="docutils literal notranslate"><span class="pre">ordflow</span></code> python package from PyPi via:</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ordflow</span></code></p>
+<ol class="arabic simple" start="2">
+<li><p>Generate an API Key from DataFlow’s web interface</p></li>
+</ol>
+<p><strong>Note</strong>: API Keys are not reusable across DataFlow servers (e.g. facility-local and central at <a class="reference external" href="https://dataflow.ornl.gov">https://dataflow.ornl.gov</a>). You will need to get an API key to suit the specific instance of DataFlow you are communicating with</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>api_key = &quot;eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJjcmVhdGVkX2F0IjoiMjAyMi1wNS0wMlQwOTo1ODoxMi0wNDowMCIsImV4cCI6MTY4Mjk4NTYwMH0.jYqV0YNn1dO_8bdQGvVY5MFqfX_xR1DxRKNZANuemuU&quot;
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Encrypt password(s) necessary to activate Globus endpoints securely</p></li>
+</ol>
+<p>Here, the two Globus endpoints (DataFlow server and destination) use the same authentication (ORNL’s XCAMS)</p>
+<p><strong>Note</strong>: You will need to get your passwords encrypted by the specific deployment of DataFlow (central / facility-local) that you intend to use</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>enc_pwd = &quot;V5yYQFuavTo83XQ9BFA04azG--5LiXo6OOA3cFPqhm--Hg3wpLrSO0wIswtbFdsz1A==&quot;
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Import the <code class="docutils literal notranslate"><span class="pre">API</span></code> class from the <code class="docutils literal notranslate"><span class="pre">dflow</span></code> package.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from ordflow import API
+</pre></div>
+</div>
+</div>
+<p>Instantiate the API object with your personal API Key:</p>
+</section>
+<section id="1.-Instantiate-the-API">
+<h2>1. Instantiate the API<a class="headerlink" href="#1.-Instantiate-the-API" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>api = API(api_key)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Using server at: https://dataflow.ornl.gov/api/v1 as default
+</pre></div></div>
+</div>
+</section>
+<section id="2.-Check-default-settings">
+<h2>2. Check default settings<a class="headerlink" href="#2.-Check-default-settings" title="Permalink to this headline">¶</a></h2>
+<p>Primarily pay attention to the <code class="docutils literal notranslate"><span class="pre">destination_globus</span></code> parameter since this is the only parameter that can be changed / has any significant effect</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.settings_get()
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;globus&#39;: {&#39;destination_endpoint&#39;: &#39;57230a10-7ba2-11e7-8c3b-22000b9923ef&#39;},
+ &#39;transport&#39;: {&#39;protocol&#39;: &#39;globus&#39;}}
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Update-a-default-setting">
+<h2>3. Update a default setting<a class="headerlink" href="#3.-Update-a-default-setting" title="Permalink to this headline">¶</a></h2>
+<p>Here, we will switch the destination endpoint to <code class="docutils literal notranslate"><span class="pre">olcf#dtn</span></code> for illustration purposes</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.settings_set(&quot;globus.destination_endpoint&quot;,
+                            &quot;ef1a9560-7ca1-11e5-992c-22000b96db58&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;globus&#39;: {&#39;destination_endpoint&#39;: &#39;ef1a9560-7ca1-11e5-992c-22000b96db58&#39;},
+ &#39;transport&#39;: {&#39;protocol&#39;: &#39;globus&#39;}}
+</pre></div></div>
+</div>
+<p>Switching back the destination endpoint to <code class="docutils literal notranslate"><span class="pre">cades#CADES-OR</span></code> which is the default</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.settings_set(&quot;globus.destination_endpoint&quot;,
+                            &quot;57230a10-7ba2-11e7-8c3b-22000b9923ef&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;globus&#39;: {&#39;destination_endpoint&#39;: &#39;57230a10-7ba2-11e7-8c3b-22000b9923ef&#39;},
+ &#39;transport&#39;: {&#39;protocol&#39;: &#39;globus&#39;}}
+</pre></div></div>
+</div>
+</section>
+<section id="4.-List-and-view-registered-instruments">
+<h2>4. List and view registered instruments<a class="headerlink" href="#4.-List-and-view-registered-instruments" title="Permalink to this headline">¶</a></h2>
+<p>Contact a DataFlow server administrator to add an instrument for you.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.instrument_list()
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;id&#39;: 2,
+  &#39;name&#39;: &#39;Asylum Research Cypher West&#39;,
+  &#39;description&#39;: &#39;AR Cypher located in building 8610 in room JG 55. This instrument is capable of Band Excitation and General-mode based measurements in addition to common advanced AFM measurements.&#39;,
+  &#39;instrument_type&#39;: None}]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.instrument_info(2)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;id&#39;: 2,
+ &#39;name&#39;: &#39;Asylum Research Cypher West&#39;,
+ &#39;description&#39;: &#39;AR Cypher located in building 8610 in room JG 55. This instrument is capable of Band Excitation and General-mode based measurements in addition to common advanced AFM measurements.&#39;,
+ &#39;instrument_type&#39;: None}
+</pre></div></div>
+</div>
+</section>
+<section id="5.-Check-to-see-if-Globus-endpoints-are-active:">
+<h2>5. Check to see if Globus endpoints are active:<a class="headerlink" href="#5.-Check-to-see-if-Globus-endpoints-are-active:" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.globus_endpoints_active(&quot;57230a10-7ba2-11e7-8c3b-22000b9923ef&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;source_activation&#39;: {&#39;code&#39;: &#39;AutoActivationFailed&#39;},
+ &#39;destination_activation&#39;: {&#39;code&#39;: &#39;AutoActivationFailed&#39;}}
+</pre></div></div>
+</div>
+</section>
+<section id="6.-Activate-one-or-both-endpoints-as-necessary:">
+<h2>6. Activate one or both endpoints as necessary:<a class="headerlink" href="#6.-Activate-one-or-both-endpoints-as-necessary:" title="Permalink to this headline">¶</a></h2>
+<p>Because the destination wasn’t already activated, we can activate that specific endpoint.</p>
+<p><strong>Note</strong>: An encrypted password is being used in place of the conventional password for safety reasons.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.globus_endpoints_activate(&quot;syz&quot;,
+                                         enc_pwd,
+                                         encrypted=True,
+                                         endpoint=&quot;destination&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;status&#39;: &#39;ok&#39;}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.globus_endpoints_active()
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;source_activation&#39;: {&#39;code&#39;: &#39;AutoActivated.CachedCredential&#39;},
+ &#39;destination_activation&#39;: {&#39;code&#39;: &#39;AlreadyActivated&#39;}}
+</pre></div></div>
+</div>
+</section>
+<section id="7.-Create-a-measurement-Dataset">
+<h2>7. Create a measurement Dataset<a class="headerlink" href="#7.-Create-a-measurement-Dataset" title="Permalink to this headline">¶</a></h2>
+<p>This creates a directory at the destination Globus Endpoint:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.dataset_create(&quot;My new dataset with nested metadata&quot;,
+                               metadata={&quot;Sample&quot;: &quot;PZT&quot;,
+                                         &quot;Microscope&quot;: {
+                                             &quot;Vendor&quot;: &quot;Asylum Research&quot;,
+                                             &quot;Model&quot;: &quot;MFP3D&quot;
+                                             },
+                                         &quot;Temperature&quot;: 373
+                                        }
+                              )
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;id&#39;: 12,
+ &#39;name&#39;: &#39;My new dataset with nested metadata&#39;,
+ &#39;creator&#39;: {&#39;id&#39;: 5, &#39;name&#39;: &#39;Suhas Somnath&#39;},
+ &#39;dataset_files&#39;: [],
+ &#39;instrument&#39;: None,
+ &#39;metadata_field_values&#39;: [{&#39;id&#39;: 13,
+   &#39;field_value&#39;: &#39;PZT&#39;,
+   &#39;field_name&#39;: &#39;Sample&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 14,
+   &#39;field_value&#39;: &#39;Asylum Research&#39;,
+   &#39;field_name&#39;: &#39;Microscope-Vendor&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 15,
+   &#39;field_value&#39;: &#39;MFP3D&#39;,
+   &#39;field_name&#39;: &#39;Microscope-Model&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 16,
+   &#39;field_value&#39;: &#39;373&#39;,
+   &#39;field_name&#39;: &#39;Temperature&#39;,
+   &#39;metadata_field&#39;: None}]}
+</pre></div></div>
+</div>
+<p>Getting the dataset ID programmatically to use later on:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset_id = response[&#39;id&#39;]
+dataset_id
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12
+</pre></div></div>
+</div>
+</section>
+<section id="8.-Upload-data-file(s)-to-Dataset">
+<h2>8. Upload data file(s) to Dataset<a class="headerlink" href="#8.-Upload-data-file(s)-to-Dataset" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.file_upload(&quot;./AFM_Topography.PNG&quot;, dataset_id)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+using Globus since other file transfer adapters have not been implemented
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;id&#39;: 9,
+ &#39;name&#39;: &#39;AFM_Topography.PNG&#39;,
+ &#39;file_length&#39;: 162,
+ &#39;file_type&#39;: &#39;&#39;,
+ &#39;created_at&#39;: &#39;2022-05-02 15:07:04 UTC&#39;,
+ &#39;relative_path&#39;: &#39;&#39;,
+ &#39;is_directory&#39;: False}
+</pre></div></div>
+</div>
+<p>Upload another data file to the same dataset:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.file_upload(&quot;./measurement_configuration.txt&quot;, dataset_id, relative_path=&quot;foo/bar&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+using Globus since other file transfer adapters have not been implemented
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;id&#39;: 10,
+ &#39;name&#39;: &#39;measurement_configuration.txt&#39;,
+ &#39;file_length&#39;: 162,
+ &#39;file_type&#39;: &#39;&#39;,
+ &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+ &#39;relative_path&#39;: &#39;foo/bar&#39;,
+ &#39;is_directory&#39;: False}
+</pre></div></div>
+</div>
+</section>
+<section id="9.-Search-Dataset:">
+<h2>9. Search Dataset:<a class="headerlink" href="#9.-Search-Dataset:" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.dataset_search(&quot;nested&quot;)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;total&#39;: 1,
+ &#39;has_more&#39;: False,
+ &#39;results&#39;: [{&#39;id&#39;: 12,
+   &#39;created_at&#39;: &#39;2022-05-02T15:03:49Z&#39;,
+   &#39;name&#39;: &#39;My new dataset with nested metadata&#39;,
+   &#39;dataset_files&#39;: [{&#39;id&#39;: 9,
+     &#39;name&#39;: &#39;AFM_Topography.PNG&#39;,
+     &#39;file_length&#39;: 162,
+     &#39;file_type&#39;: &#39;&#39;,
+     &#39;created_at&#39;: &#39;2022-05-02 15:07:04 UTC&#39;,
+     &#39;relative_path&#39;: &#39;&#39;,
+     &#39;is_directory&#39;: False},
+    {&#39;id&#39;: 10,
+     &#39;name&#39;: &#39;measurement_configuration.txt&#39;,
+     &#39;file_length&#39;: 162,
+     &#39;file_type&#39;: &#39;&#39;,
+     &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+     &#39;relative_path&#39;: &#39;foo/bar&#39;,
+     &#39;is_directory&#39;: False},
+    {&#39;id&#39;: 11,
+     &#39;name&#39;: &#39;foo&#39;,
+     &#39;file_length&#39;: None,
+     &#39;file_type&#39;: None,
+     &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+     &#39;relative_path&#39;: &#39;&#39;,
+     &#39;is_directory&#39;: True},
+    {&#39;id&#39;: 12,
+     &#39;name&#39;: &#39;bar&#39;,
+     &#39;file_length&#39;: None,
+     &#39;file_type&#39;: None,
+     &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+     &#39;relative_path&#39;: &#39;foo&#39;,
+     &#39;is_directory&#39;: True}],
+   &#39;metadata_field_values&#39;: [{&#39;id&#39;: 13,
+     &#39;field_value&#39;: &#39;PZT&#39;,
+     &#39;field_name&#39;: &#39;Sample&#39;,
+     &#39;metadata_field&#39;: None},
+    {&#39;id&#39;: 14,
+     &#39;field_value&#39;: &#39;Asylum Research&#39;,
+     &#39;field_name&#39;: &#39;Microscope-Vendor&#39;,
+     &#39;metadata_field&#39;: None},
+    {&#39;id&#39;: 15,
+     &#39;field_value&#39;: &#39;MFP3D&#39;,
+     &#39;field_name&#39;: &#39;Microscope-Model&#39;,
+     &#39;metadata_field&#39;: None},
+    {&#39;id&#39;: 16,
+     &#39;field_value&#39;: &#39;373&#39;,
+     &#39;field_name&#39;: &#39;Temperature&#39;,
+     &#39;metadata_field&#39;: None}]}]}
+</pre></div></div>
+</div>
+<p>Parsing the response to get the dataset of interest for us:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dset_id = response[&#39;results&#39;][0][&#39;id&#39;]
+dset_id
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12
+</pre></div></div>
+</div>
+</section>
+<section id="10.-View-this-Dataset:">
+<h2>10. View this Dataset:<a class="headerlink" href="#10.-View-this-Dataset:" title="Permalink to this headline">¶</a></h2>
+<p>This view shows both the files and metadata contained in a dataset:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = api.dataset_info(dset_id)
+response
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;id&#39;: 12,
+ &#39;name&#39;: &#39;My new dataset with nested metadata&#39;,
+ &#39;creator&#39;: {&#39;id&#39;: 5, &#39;name&#39;: &#39;Suhas Somnath&#39;},
+ &#39;dataset_files&#39;: [{&#39;id&#39;: 9,
+   &#39;name&#39;: &#39;AFM_Topography.PNG&#39;,
+   &#39;file_length&#39;: 162,
+   &#39;file_type&#39;: &#39;&#39;,
+   &#39;created_at&#39;: &#39;2022-05-02 15:07:04 UTC&#39;,
+   &#39;relative_path&#39;: &#39;&#39;,
+   &#39;is_directory&#39;: False},
+  {&#39;id&#39;: 10,
+   &#39;name&#39;: &#39;measurement_configuration.txt&#39;,
+   &#39;file_length&#39;: 162,
+   &#39;file_type&#39;: &#39;&#39;,
+   &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+   &#39;relative_path&#39;: &#39;foo/bar&#39;,
+   &#39;is_directory&#39;: False},
+  {&#39;id&#39;: 11,
+   &#39;name&#39;: &#39;foo&#39;,
+   &#39;file_length&#39;: None,
+   &#39;file_type&#39;: None,
+   &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+   &#39;relative_path&#39;: &#39;&#39;,
+   &#39;is_directory&#39;: True},
+  {&#39;id&#39;: 12,
+   &#39;name&#39;: &#39;bar&#39;,
+   &#39;file_length&#39;: None,
+   &#39;file_type&#39;: None,
+   &#39;created_at&#39;: &#39;2022-05-02 15:07:08 UTC&#39;,
+   &#39;relative_path&#39;: &#39;foo&#39;,
+   &#39;is_directory&#39;: True}],
+ &#39;instrument&#39;: None,
+ &#39;metadata_field_values&#39;: [{&#39;id&#39;: 13,
+   &#39;field_value&#39;: &#39;PZT&#39;,
+   &#39;field_name&#39;: &#39;Sample&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 14,
+   &#39;field_value&#39;: &#39;Asylum Research&#39;,
+   &#39;field_name&#39;: &#39;Microscope-Vendor&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 15,
+   &#39;field_value&#39;: &#39;MFP3D&#39;,
+   &#39;field_name&#39;: &#39;Microscope-Model&#39;,
+   &#39;metadata_field&#39;: None},
+  {&#39;id&#39;: 16,
+   &#39;field_value&#39;: &#39;373&#39;,
+   &#39;field_name&#39;: &#39;Temperature&#39;,
+   &#39;metadata_field&#39;: None}]}
+</pre></div></div>
+</div>
+</section>
+<section id="11.-View-files-uploaded-via-DataFlow:">
+<h2>11. View files uploaded via DataFlow:<a class="headerlink" href="#11.-View-files-uploaded-via-DataFlow:" title="Permalink to this headline">¶</a></h2>
+<p>We’re not using DataFlow here but just viewing the destination file system.</p>
+<p>Datasets are sorted by date:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! ls -hlt ~/dataflow/untitled_instrument/
+</pre></div>
+</div>
+</div>
+<p>There may be more than one dataset per day. Here we only have one</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!ls -hlt ~/dataflow/untitled_instrument/2022-04-06/
+</pre></div>
+</div>
+</div>
+<p>Viewing the root directory of the dataset we just created:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!ls -hlt ~/dataflow/untitled_instrument/2022-04-06/135750_atomic_force_microscopy_scan_of_pzt/
+</pre></div>
+</div>
+</div>
+<p>We will very soon be able to specify root level metadata that will be stored in <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code>.</p>
+<p>We can also see the nested directories: <code class="docutils literal notranslate"><span class="pre">foo/bar</span></code> where we uploaded the second file:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!ls -hlt  ~/dataflow/untitled_instrument/2022-04-06/135750_atomic_force_microscopy_scan_of_pzt/foo/
+</pre></div>
+</div>
+</div>
+<p>Looking at the inner most directory - <code class="docutils literal notranslate"><span class="pre">bar</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!ls -hlt ~/dataflow/untitled_instrument/2022-04-06/135750_atomic_force_microscopy_scan_of_pzt/foo/bar
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Suhas Somnath and Greg Shutt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

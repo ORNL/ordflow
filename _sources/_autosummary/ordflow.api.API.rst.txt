@@ -1,0 +1,35 @@
+ordflow.api.API
+===============
+
+.. currentmodule:: ordflow.api
+
+.. autoclass:: API
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~API.dataset_create
+      ~API.dataset_info
+      ~API.dataset_search
+      ~API.file_upload
+      ~API.files_search
+      ~API.globus_endpoints_activate
+      ~API.globus_endpoints_active
+      ~API.instrument_info
+      ~API.instrument_list
+      ~API.settings_get
+      ~API.settings_set
+   
+   
+
+   
+   
+   

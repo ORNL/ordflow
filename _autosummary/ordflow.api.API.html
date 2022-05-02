@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ordflow.api.API &mdash; ordflow 0.0.2</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ordflow
+          </a>
+              <div class="version">
+                0.0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="ordflow.html">ordflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/01_User_guide/index.html">User guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ordflow</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>ordflow.api.API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/ordflow.api.API.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="ordflow-api-api">
+<h1>ordflow.api.API<a class="headerlink" href="#ordflow-api-api" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ordflow.api.API">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ordflow.api.</span></span><span class="sig-name descname"><span class="pre">API</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Creates an instance of the API class to communicate with DataFlow</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – API key for accessing DataFlow
+Please omit the “Bearer ” prefix before the API key</p></li>
+<li><p><strong>server_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>Optional</em>) – URL for DataFlow server.
+Default: staging server</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.dataset_create" title="ordflow.api.API.dataset_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataset_create</span></code></a></p></td>
+<td><p>Create a new dataset</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ordflow.api.API.dataset_info" title="ordflow.api.API.dataset_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataset_info</span></code></a></p></td>
+<td><p>Show information about a dataset</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.dataset_search" title="ordflow.api.API.dataset_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataset_search</span></code></a></p></td>
+<td><p>Search for a dataset in DataFlow</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ordflow.api.API.file_upload" title="ordflow.api.API.file_upload"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_upload</span></code></a></p></td>
+<td><p>Upload the provided file to the specified Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.files_search" title="ordflow.api.API.files_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">files_search</span></code></a></p></td>
+<td><p>Search for individual files in datasets</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ordflow.api.API.globus_endpoints_activate" title="ordflow.api.API.globus_endpoints_activate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">globus_endpoints_activate</span></code></a></p></td>
+<td><p>Activates Globus endpoints necessary to transfer data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.globus_endpoints_active" title="ordflow.api.API.globus_endpoints_active"><code class="xref py py-obj docutils literal notranslate"><span class="pre">globus_endpoints_active</span></code></a></p></td>
+<td><p>Checks whether both source and destination Globus endpoints are active</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ordflow.api.API.instrument_info" title="ordflow.api.API.instrument_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instrument_info</span></code></a></p></td>
+<td><p>Show information about an Instrument</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.instrument_list" title="ordflow.api.API.instrument_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instrument_list</span></code></a></p></td>
+<td><p>List all instruments connected to this DataFlow server</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ordflow.api.API.settings_get" title="ordflow.api.API.settings_get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settings_get</span></code></a></p></td>
+<td><p>Gets current default user settings</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ordflow.api.API.settings_set" title="ordflow.api.API.settings_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settings_set</span></code></a></p></td>
+<td><p>Set or update default user settings</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.dataset_create">
+<span class="sig-name descname"><span class="pre">dataset_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.dataset_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.dataset_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Title for dataset</p></li>
+<li><p><strong>instrument_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Instrument ID. Default = 0 - UnknownInstrument</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – Scientific metadata associated with this dataset.
+Metadata specified as {“param 1”: value_1, “param 2”: value_2}
+Nested dictionaries will be flattened with keys joined with a “-” separator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from POST request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.dataset_info">
+<span class="sig-name descname"><span class="pre">dataset_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dset_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.dataset_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.dataset_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show information about a dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – ID for dataset</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.dataset_search">
+<span class="sig-name descname"><span class="pre">dataset_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.dataset_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.dataset_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for a dataset in DataFlow</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Text or date to search on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.file_upload">
+<span class="sig-name descname"><span class="pre">file_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.file_upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.file_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload the provided file to the specified Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Local path to file that needs to be uploaded</p></li>
+<li><p><strong>dataset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Dataset ID to upload this file to</p></li>
+<li><p><strong>relative_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – Relative path in destination to place this file.
+Default - the file will be uploaded to the root directory of the dataset</p></li>
+<li><p><strong>transport</strong> (<em>ordflow.Transport</em><em>, </em><em>optional</em>) – Transport protocol to use to transfer this specific file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from POST request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.files_search">
+<span class="sig-name descname"><span class="pre">files_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.files_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.files_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for individual files in datasets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Search query</p></li>
+<li><p><strong>dataset_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Filter results to the specified Dataset. Default - no filtering</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.globus_endpoints_activate">
+<span class="sig-name descname"><span class="pre">globus_endpoints_activate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encrypted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'destination'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.globus_endpoints_activate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.globus_endpoints_activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates Globus endpoints necessary to transfer data.</p>
+<p class="rubric">Notes</p>
+<p>It is entirely possible that the source and destination endpoints are in different security enclaves
+in the same organization or even in different organizations.
+For now, the “source” endpoint typically uses ORNL XCAMS credentials (your three-character ID and password).
+By default, the “destination” endpoint points to ORNL’s CADES Open-Research Network File System, which also
+uses ORNL XCAMS credentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – user name associated with the specified endpoint</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – password associated with specified endpoint</p></li>
+<li><p><strong>encrypted</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>Optional</em>) – Whether or not the password is encrypted (using the DataFlow web server’s encryption).
+Default = encrypted password</p></li>
+<li><p><strong>endpoint</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>Optional</em>) – Endpoint to activate.
+The 3 valid options are:
+1. “source” - DataFlow server’s endpoint,
+2. “destination” - Where data will be sent to,
+and 3. the UUID of some other endpoint</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.globus_endpoints_active">
+<span class="sig-name descname"><span class="pre">globus_endpoints_active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.globus_endpoints_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.globus_endpoints_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether both source and destination Globus endpoints are active</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>endpoint</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>Optional.</em>) – UUID of endpoint whose status needs to be checked.
+Default = None - checks the default destination Globus endpoint
+along with the DataFlow server’s endpoint</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.instrument_info">
+<span class="sig-name descname"><span class="pre">instrument_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instr_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.instrument_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.instrument_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show information about an Instrument</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>instr_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – ID for Insrtument</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from GET request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.instrument_list">
+<span class="sig-name descname"><span class="pre">instrument_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.instrument_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.instrument_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all instruments connected to this DataFlow server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Response from GET request</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.settings_get">
+<span class="sig-name descname"><span class="pre">settings_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.settings_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.settings_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets current default user settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Response from GET request</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ordflow.api.API.settings_set">
+<span class="sig-name descname"><span class="pre">settings_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ordflow/api.html#API.settings_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ordflow.api.API.settings_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or update default user settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>setting</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of parameter
+Currently, only “globus.destination_endpoint” and “transport.protocol” are supported</p></li>
+<li><p><strong>value</strong> (<em>obj</em>) – New value for chosen parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Response from POST request</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Suhas Somnath and Greg Shutt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
