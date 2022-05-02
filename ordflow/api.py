@@ -9,7 +9,6 @@ class Transport(Enum):
     The different data transfer protocols supported by DataFlow
     """
     GLOBUS = 0
-    HTTPS = 1
 
 
 class API(object):
@@ -274,7 +273,7 @@ class API(object):
         ----------
         endpoint : str, Optional. 
             UUID of endpoint whose status needs to be checked. 
-            Default = None - checks the default destination Globus endpoint 
+            Default = None - checks the default destination Globus endpoint
             along with the DataFlow server's endpoint
 
         Returns
@@ -494,8 +493,10 @@ class API(object):
                 raise TypeError("relative_path should be a string")
             form_data.update({'relative_path': relative_path})
 
+        """
         if transport != Transport.GLOBUS:
             print("using Globus since other file transfer adapters have not been implemented")
+        """
 
         response = self.__post(url,
                                files={'file': file_handle},
